@@ -1,8 +1,11 @@
-
+import yaml
+import os
 class Client:
-    def __init__(self,serveIPAdress=None,LocalIP=None) -> None:
-        self.IPAdress=serveIPAdress
-        self.LocalIP=LocalIP
+    def __init__(self, config_path=None):
+        with open(config_path, 'r') as file:
+            self.reader = yaml.safe_load(file)
+        self.server_ip = self.reader.get("ServerIPAddress")
+        self.LocalIP=self.reader.get("localIPAddress")
         self.connect=False
 
     def check_IP_adress(self):
@@ -15,5 +18,9 @@ class Client:
             print(f"Local IP{self.LocalIP}")
     
 if __name__=="__main__":
-    client=Client(None, " 192.168.0.1")
+    config_name="config.yml"
+    parent_directory=os.getcwd()
+    config_path=os.path.join(parent_directory,config_name)
+    print(config_path)
+    client=Client(config_path)
     client.check_IP_adress()
